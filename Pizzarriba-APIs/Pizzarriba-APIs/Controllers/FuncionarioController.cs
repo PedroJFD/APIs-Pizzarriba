@@ -1,6 +1,5 @@
 ﻿using FuncionarioAPI.Models;
-using FuncionarioAPI.Repositories;
-using jenesepais.Recursos;
+using ANP___Atividade___Cliente.Recursos;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using static System.Runtime.InteropServices.JavaScript.JSType;
