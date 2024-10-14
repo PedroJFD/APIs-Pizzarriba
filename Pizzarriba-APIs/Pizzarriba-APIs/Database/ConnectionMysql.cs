@@ -13,7 +13,7 @@ namespace Pizzarriba_APIs.Database
 
         private static readonly string password = "root";
 
-        private static readonly string dbname = "pizzarriba bd";
+        private static readonly string dbname = "pizzarriba_bd";
 
         private static MySqlConnection connection;
 

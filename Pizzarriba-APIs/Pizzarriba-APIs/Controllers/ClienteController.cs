@@ -16,23 +16,22 @@ namespace ANP___Atividade___Cliente.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        List<Cliente> ListaClientes = new List<Cliente>();
+        List<Cliente> listaClientes = new ClienteDAO().List();
 
         [HttpGet]
         public IActionResult List()
         {
-            List<Cliente> listaCliente = new ClienteDAO().List();
-
-            return Ok(listaCliente);
+            return Ok(listaClientes);
         }
-        [HttpGet("{Id}")]
-        public IActionResult GetByed(int Id)
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
         {
-            var cliente = ListaClientes.Where(item => item.Id == Id).FirstOrDefault();
+            var cliente = listaClientes.FirstOrDefault(item => item.Id == id);
 
             if (cliente == null)
             {
-                return BadRequest("Cliente não encontrado.");
+                return NotFound("Cliente não encontrado.");
             }
 
             return Ok(cliente);
@@ -57,7 +56,7 @@ namespace ANP___Atividade___Cliente.Controllers
                 cliente.Cidade = item.Cidade;
                 cliente.Complemento = item.Complemento;
 
-                ListaClientes.Add(cliente);
+                listaClientes.Add(cliente);
 
                 try
                 {
@@ -80,7 +79,7 @@ namespace ANP___Atividade___Cliente.Controllers
         [HttpPut("{Id}")]
         public IActionResult Put(int Id, [FromBody] ClienteDTO item)
         {
-            var cliente = ListaClientes.Where(item => item.Id == Id).FirstOrDefault();
+            var cliente = listaClientes.Where(item => item.Id == Id).FirstOrDefault();
 
             if (cliente == null)
             {
@@ -112,14 +111,14 @@ namespace ANP___Atividade___Cliente.Controllers
         [HttpDelete("{Id}")]
         public IActionResult Delete(int Id)
         {
-            var cliente = ListaClientes.Where(item => item.Id == Id).FirstOrDefault();
+            var cliente = listaClientes.Where(item => item.Id == Id).FirstOrDefault();
 
             if (cliente == null)
             {
                 return BadRequest("Cliente não encontrado.");
             }
 
-            ListaClientes.Remove(cliente);
+            listaClientes.Remove(cliente);
 
             return Ok(cliente);
         }

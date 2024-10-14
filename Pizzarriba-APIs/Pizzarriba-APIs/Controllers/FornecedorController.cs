@@ -1,16 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ANP___Atividade___Cliente.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Fornecedores.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Fornecedor")]
     [ApiController]
-    public class FornecedorController : Controller
+    public class FornecedorController : ControllerBase
     {
-        private static List<FornecedorDTO> fornecedores = new List<FornecedorDTO>();
+        List<Fornecedor> listaFornecedor = new FornecedorDAO().List();
+
+        [HttpGet]
+        public IActionResult List()
+        {
+            return Ok(listaFornecedor);
+        }
 
         private bool ValidarCNPJ(string cnpj)
         {
@@ -18,20 +26,14 @@ namespace Fornecedores.Controllers
             return cnpj.Length == 14;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
         {
-            return Ok(fornecedores);
-        }
-
-        [HttpGet("{Id}")]
-        public IActionResult GetByed(int Id)
-        {
-            var fornecedor = fornecedores.FirstOrDefault(f => f.Id == Id);
+            var fornecedor = listaFornecedor.FirstOrDefault(item => item.Id == id);
 
             if (fornecedor == null)
             {
-                return BadRequest("Fornecedor não encontrado.");
+                return NotFound("Fornecedor não encontrado.");
             }
 
             return Ok(fornecedor);
@@ -50,7 +52,7 @@ namespace Fornecedores.Controllers
                 return BadRequest("CNPJ inválido.");
             }
 
-            var fornecedor = new FornecedorDTO
+            var fornecedor = new Fornecedor
             {
                 Id = dto.Id,
                 Nome = dto.Nome,
@@ -65,7 +67,15 @@ namespace Fornecedores.Controllers
                 Produto = dto.Produto
             };
 
-            fornecedores.Add(fornecedor);
+            try
+            {
+                var dao = new FornecedorDAO();
+                fornecedor.Id = dao.Insert(fornecedor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return StatusCode(StatusCodes.Status201Created, fornecedor);
         }
@@ -78,7 +88,7 @@ namespace Fornecedores.Controllers
                 return BadRequest("CNPJ inválido.");
             }
 
-            var fornecedor = fornecedores.FirstOrDefault(f => f.CNPJ == cnpj);
+            var fornecedor = listaFornecedor.FirstOrDefault(f => f.CNPJ == cnpj);
 
             if (fornecedor == null)
             {
@@ -106,14 +116,14 @@ namespace Fornecedores.Controllers
                 return BadRequest("CNPJ inválido.");
             }
 
-            var fornecedor = fornecedores.FirstOrDefault(f => f.CNPJ == cnpj);
+            var fornecedor = listaFornecedor.FirstOrDefault(f => f.CNPJ == cnpj);
 
             if (fornecedor == null)
             {
                 return NotFound("Fornecedor não encontrado.");
             }
 
-            fornecedores.Remove(fornecedor);
+            listaFornecedor.Remove(fornecedor);
 
             return Ok(fornecedor);
         }
