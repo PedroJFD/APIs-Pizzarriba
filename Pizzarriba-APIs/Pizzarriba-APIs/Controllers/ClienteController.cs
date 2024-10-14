@@ -17,27 +17,13 @@ namespace ANP___Atividade___Cliente.Controllers
     public class ClienteController : ControllerBase
     {
         List<Cliente> ListaClientes = new List<Cliente>();
-        public ClienteController()
-        {
-            var cliente1 = new Cliente()
-            {
-                Id = 1,
-                Nome = "Gonzalez",
-                Sexo = "Homem",
-                Cpf = "006.308.312-46",
-                Telefone = "(69)99999-9999",
-                Email = "email",
-                Rua = "Rua",
-                Bairro = "Bairro",
-                Numero = "1",
-                Cidade = "Jipa",
-                Complemento = "Esquina"
-            };
-        }
+
         [HttpGet]
         public IActionResult List()
         {
-            return Ok(ListaClientes);
+            List<Cliente> listaCliente = new ClienteDAO().List();
+
+            return Ok(listaCliente);
         }
         [HttpGet("{Id}")]
         public IActionResult GetByed(int Id)
@@ -72,6 +58,16 @@ namespace ANP___Atividade___Cliente.Controllers
                 cliente.Complemento = item.Complemento;
 
                 ListaClientes.Add(cliente);
+
+                try
+                {
+                    var dao = new ClienteDAO();
+                    cliente.Id = dao.Insert(cliente);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
 
                 return StatusCode(StatusCodes.Status201Created, cliente);
             }
