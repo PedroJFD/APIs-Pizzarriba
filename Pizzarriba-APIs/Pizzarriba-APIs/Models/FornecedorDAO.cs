@@ -32,7 +32,7 @@ namespace ANP___Atividade___Cliente.Models
                 query.Parameters.AddWithValue("@rua", item.Rua);
                 query.Parameters.AddWithValue("@bairro", item.Bairro);
                 query.Parameters.AddWithValue("@numero", item.Numero);
-
+                //das
                 var result = query.ExecuteNonQuery();
 
                 if (result == 0)
