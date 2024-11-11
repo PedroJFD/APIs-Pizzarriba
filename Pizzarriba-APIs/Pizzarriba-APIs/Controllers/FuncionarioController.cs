@@ -3,6 +3,9 @@ using ANP___Atividade___Cliente.Recursos;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Fornecedores;
+using Pizzarriba_APIs.Dtos;
+using ANP___Atividade___Funcionario.Models;
 
 namespace FuncionarioAPI.Controllers
 {
@@ -10,44 +13,23 @@ namespace FuncionarioAPI.Controllers
     [Route("[controller]")]
     public class FuncionarioController : ControllerBase
     {
-        List<Funcionario> ListFunc = new List<Funcionario>();
-
-        public FuncionarioController()
-        {
-            var funcionario = new Funcionario() 
-            {
-                Nome = "Giovanna",
-                ID = "390239",
-                Email = "gio@gmail.com",
-                Telefone = "320903293",
-                CPF = "320903293",
-                RG = "320903293",
-                PISNIT = "320903293",
-                OrgaoEmissorRG = "320903293",
-                Cargo = "320903293",
-                Endereco = "320903293",
-                Rua = "320903293",
-                Numero = "320903293",
-                Bairro = "320903293",
-                Cidade = "saipjas",
-                Complemento = "sdfsfsd",
-
-            };
-            ListFunc.Add(funcionario);
-        }
+        List<Funcionario> ListaFuncionarios = new FuncionarioDAO().List();
 
         [HttpGet]
         public IActionResult ListarFuncionarios()
         {
-            return Ok(ListFunc);
+            return Ok(ListaFuncionarios);
         }
 
-        [HttpGet("{cpf}")]
+        [HttpGet("{CPF}")]
         public IActionResult VisualizarFuncionario(string cpf)
         {
-            var funcionario = ListFunc.FirstOrDefault(f => f.CPF == cpf);
+            var funcionario = ListaFuncionarios.FirstOrDefault(item => item.CPF == cpf);
+
             if (funcionario == null)
-                return NotFound(new { message = "Funcionário não encontrado" });
+            {
+                return NotFound("Funcionario não encontrado.");
+            }
 
             return Ok(funcionario);
         }
@@ -73,6 +55,8 @@ namespace FuncionarioAPI.Controllers
             funcionario.Cidade = novoFuncionario.Cidade;
             funcionario.Complemento = novoFuncionario.Complemento;
 
+            ListaFuncionarios.Add(funcionario);
+
 
             if (ValidadorCPF.ValidaCPF(funcionario.CPF) == true)
             {
@@ -92,77 +76,86 @@ namespace FuncionarioAPI.Controllers
                 funcionario.Cidade = novoFuncionario.Cidade;
                 funcionario.Complemento = novoFuncionario.Complemento;
 
-                ListFunc.Add(funcionario);
-              
+                ListaFuncionarios.Add(funcionario);
+
+                try
+                {
+                    var dao = new FuncionarioDAO();
+                    funcionario.ID = dao.Insert(funcionario);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
 
                 return StatusCode(StatusCodes.Status201Created, funcionario);
             }
             else
-            {
-                return BadRequest("CPF Inválido.");
-            }
+            { return BadRequest("CPF Inválido. "); }
         }
+    
 
         [HttpPut("{cpf}")]
-        public IActionResult AtualizarFuncionario(string Id, [FromBody] Funcionario funcionarioAtualizado)
+        public IActionResult Put(int Id, [FromBody] FuncionarioDTO item)
         {
-            var funcionario = ListFunc.Where(item => item.ID == Id).FirstOrDefault();
+            var funcionario = ListaFuncionarios.Where(item => item.ID == Id).FirstOrDefault();
 
-            if (funcionario == null)
+            if(funcionario == null)
             {
                 return BadRequest("Funcionario não encontrado.");
             }
 
-            funcionario.Nome = funcionarioAtualizado.Nome;
-            funcionario.ID = funcionarioAtualizado.ID;
-            funcionario.Email = funcionarioAtualizado.Email;
-            funcionario.Telefone = funcionarioAtualizado.Telefone;
-            funcionario.CPF = funcionarioAtualizado.CPF;
-            funcionario.RG = funcionarioAtualizado.RG;
-            funcionario.PISNIT = funcionarioAtualizado.PISNIT;
-            funcionario.OrgaoEmissorRG = funcionarioAtualizado.OrgaoEmissorRG;
-            funcionario.Cargo = funcionarioAtualizado.Cargo;
-            funcionario.Endereco = funcionarioAtualizado.Endereco;
-            funcionario.Rua = funcionarioAtualizado.Rua;
-            funcionario.Numero = funcionarioAtualizado.Numero;
-            funcionario.Bairro = funcionarioAtualizado.Bairro;
-            funcionario.Cidade = funcionarioAtualizado.Cidade;
-           
+            funcionario.Nome = item.Nome;
+            funcionario.ID = item.ID;
+            funcionario.Email = item.Email;
+            funcionario.Telefone = item.Telefone;
+            funcionario.CPF = item.CPF;
+            funcionario.RG = item.RG;
+            funcionario.PISNIT = item.PISNIT;
+            funcionario.OrgaoEmissorRG = item.OrgaoEmissorRG;
+            funcionario.Cargo = item.Cargo;
+            funcionario.Endereco = item.Endereco;
+            funcionario.Rua = item.Rua;
+            funcionario.Numero = item.Numero;
+            funcionario.Bairro = item.Bairro;
+            funcionario.Cidade = item.Cidade;
+
             if (ValidadorCPF.ValidaCPF(funcionario.CPF) == true)
-                return BadRequest(new { message = "CPF inválido" });
-
-            funcionario.Nome = funcionarioAtualizado.Nome;
-            funcionario.ID = funcionarioAtualizado.ID;
-            funcionario.Email = funcionarioAtualizado.Email;
-            funcionario.Telefone = funcionarioAtualizado.Telefone;
-            funcionario.CPF = funcionarioAtualizado.CPF;
-            funcionario.RG = funcionarioAtualizado.RG;
-            funcionario.PISNIT = funcionarioAtualizado.PISNIT;
-            funcionario.OrgaoEmissorRG = funcionarioAtualizado.OrgaoEmissorRG;
-            funcionario.Cargo = funcionarioAtualizado.Cargo;
-            funcionario.Endereco = funcionarioAtualizado.Endereco;
-            funcionario.Rua = funcionarioAtualizado.Rua;
-            funcionario.Numero = funcionarioAtualizado.Numero;
-            funcionario.Bairro = funcionarioAtualizado.Bairro;
-            funcionario.Cidade = funcionarioAtualizado.Cidade;
-
-            ListFunc.Add(funcionario);
-            return Ok(funcionario);
-        }
-
-        [HttpDelete("{ID}")]
-        public IActionResult ExcluirFuncionario(string ID)
-        {
-            var funcionario = ListFunc.Where(f => f.ID == ID).FirstOrDefault();
-
-            if (funcionario == null)
             {
-                return BadRequest("Funcionario não encontrado.");
-            }
+                funcionario.Nome = item.Nome;
+                funcionario.ID = item.ID;
+                funcionario.Email = item.Email;
+                funcionario.Telefone = item.Telefone;
+                funcionario.CPF = item.CPF;
+                funcionario.RG = item.RG;
+                funcionario.PISNIT = item.PISNIT;
+                funcionario.OrgaoEmissorRG = item.OrgaoEmissorRG;
+                funcionario.Cargo = item.Cargo;
+                funcionario.Endereco = item.Endereco;
+                funcionario.Rua = item.Rua;
+                funcionario.Numero = item.Numero;
+                funcionario.Bairro = item.Bairro;
+                funcionario.Cidade = item.Cidade;
 
-            ListFunc.Remove(funcionario);
+                return Ok(funcionario);
+            } else
+            { return BadRequest("CPF Inválido. ");  }
 
-            return Ok(funcionario);
+                
         }
+        [HttpDelete("{Id}")]
+            public IActionResult Delete(int ID)
+            {
+                var funcionario = ListaFuncionarios.Where(item => item.ID == ID).FirstOrDefault();
+
+                if (funcionario == null)
+                {
+                    return BadRequest("Funcionario não encontrado.");
+                }
+
+                ListaFuncionarios.Remove(funcionario);
+
+                return Ok(funcionario);
+            }
     }
 }
