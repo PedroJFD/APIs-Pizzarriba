@@ -1,87 +1,98 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Pizzarriba_APIs.DTOs;
-using Pizzarriba_APIs.Models;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
+using ANP___Atividade___Cliente.Models;
+using ANP___Atividade___Cliente.Recursos;
+using ANP___Atividade___Cliente.Dtos;
+using System.Xml;
+using System.Xml.Linq;
+using System.Reflection.PortableExecutable;
+using System.Xml.Serialization;
+using static ANP___Atividade___Cliente.Models.Cliente;
 
-namespace Pizzarriba_APIs.Controllers
+namespace ANP___Atividade___Cliente.Controllers
 {
+    [Route("Produto")]
     [ApiController]
-    [Route("api/[controller]")]
     public class ProdutoController : ControllerBase
     {
-       
-        private static List<Produto> produtos = new List<Produto>();
-        private static int nextId = 1;
+        List<Cliente> listaProdutos = new ProdutoDAO().List();
 
-       
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult List()
         {
-            return Ok(produtos);
+            return Ok(listaProdutos);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var produto = produtos.FirstOrDefault(p => p.Id == id);
+            var produto = listaProdutos.FirstOrDefault(item => item.Id == id);
+
             if (produto == null)
             {
                 return NotFound("Produto não encontrado.");
             }
+
             return Ok(produto);
         }
-
-      
         [HttpPost]
-        public IActionResult Post([FromBody] ProdutoDTO produtoDto)
+        public IActionResult Post([FromBody] ProdutoDTO item)
         {
-            if (produtoDto == null)
-            {
-                return BadRequest("Produto inválido.");
-            }
+            var produto = new Produto();
 
-            var novoProduto = new Produto
-            {
-                Id = nextId++,
-                Nome = produtoDto.Nome,
-                Preco = produtoDto.Preco,
-                Descricao = produtoDto.Descricao
-            };
+            produto.Id = item.Id;
+            produto.Nome = item.Nome;
+            produto.Preco = item.Preco;
+            produto.Descricao = item.Descricao;
 
-            produtos.Add(novoProduto);
-            return Ok(novoProduto);
         }
 
-     
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] ProdutoDTO produtoDto)
+        [HttpPut("{Id}")]
+        public IActionResult Put(int Id, [FromBody] ClienteDTO item)
         {
-            var produtoExistente = produtos.FirstOrDefault(p => p.Id == id);
-            if (produtoExistente == null)
+            var cliente = listaClientes.Where(item => item.Id == Id).FirstOrDefault();
+
+            if (cliente == null)
             {
-                return NotFound("Produto não encontrado.");
+                return BadRequest("Cliente não encontrado.");
             }
 
-            produtoExistente.Nome = produtoDto.Nome;
-            produtoExistente.Preco = produtoDto.Preco;
-            produtoExistente.Descricao = produtoDto.Descricao;
+            cliente.Nome = item.Nome;
+            cliente.Sexo = item.Sexo;
+            cliente.Cpf = item.Cpf;
 
-            return Ok(produtoExistente);
+            if (ValidadorCPF.ValidaCPF(cliente.Cpf) == true)
+            {
+                cliente.Telefone = item.Telefone;
+                cliente.Email = item.Email;
+                cliente.Rua = item.Rua;
+                cliente.Bairro = item.Bairro;
+                cliente.Numero = item.Numero;
+                cliente.Cidade = item.Cidade;
+                cliente.Complemento = item.Complemento;
+
+                return Ok(cliente);
+            }
+            else
+            {
+                return BadRequest("CPF Inválido.");
+            }
         }
 
-       
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{Id}")]
+        public IActionResult Delete(int Id)
         {
-            var produto = produtos.FirstOrDefault(p => p.Id == id);
-            if (produto == null)
+            var cliente = listaClientes.Where(item => item.Id == Id).FirstOrDefault();
+
+            if (cliente == null)
             {
-                return NotFound("Produto não encontrado.");
+                return BadRequest("Cliente não encontrado.");
             }
 
-            produtos.Remove(produto);
-            return Ok("Produto removido com sucesso.");
+            listaClientes.Remove(cliente);
+
+            return Ok(cliente);
         }
     }
 }
