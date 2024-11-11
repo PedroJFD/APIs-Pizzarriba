@@ -51,26 +51,20 @@ create table Ingrediente (
 	nome_ing varchar(200),
 	medida_ing varchar(100),
 	quantidade_ing double,
-	id_for_fk int not null,
-	foreign key (id_for_fk) references Fornecedor (id_for)
 );
 
 create table Produto (
 	id_pro int primary key,
 	nome_pro varchar(200),
 	preco_pro float,
-	id_ing_fk int not null,
-	foreign key (id_ing_fk) references Ingrediente (id_ing)
 );
 
 create table Material (
 	id_mat int primary key,
     nome_mat varchar(200),
     medida_mat varchar(50),
-    quantidade_mat double,
-	id_mat_fk int not null,
-	foreign key (id_mat_fk) references Ingrediente (id_ing)
+    quantidade_mat double
 );
 
-insert into Cliente (id_cli, nome_cli, sexo_cli, cpf_cli, telefone_cli, email_cli, rua_cli, bairro_cli, numero_cli, cidade_cli, complemento_cli) values (1, 'Pedro Joaquim', 'Masculino', '043.389.642-60', '(69) 99303-48903', 'pedrojoca@gmail.com', 'Nossa Senhora Aparecida', 'União', '509', 'Ouro Preto do Oeste', 'Casa de Esquina');
-SELECT * FROM pizzarriba.cliente;
+##insert into Cliente (id_cli, nome_cli, sexo_cli, cpf_cli, telefone_cli, email_cli, rua_cli, bairro_cli, numero_cli, cidade_cli, complemento_cli) values (1, 'Pedro Joaquim', 'Masculino', '043.389.642-60', '(69) 99303-48903', 'pedrojoca@gmail.com', 'Nossa Senhora Aparecida', 'União', '509', 'Ouro Preto do Oeste', 'Casa de Esquina');
+##SELECT * FROM pizzarriba.cliente;
