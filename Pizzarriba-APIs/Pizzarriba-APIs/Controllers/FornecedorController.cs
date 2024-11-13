@@ -1,9 +1,5 @@
 ﻿using ANP___Atividade___Cliente.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MySqlX.XDevAPI;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Fornecedores.Controllers

@@ -1,8 +1,5 @@
 ﻿using Pizzarriba_APIs.Database;
-using System.Xml.Serialization;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using MySql.Data.MySqlClient;
-using Pizzarriba_APIs.Models;
 
 namespace Pizzarriba_APIs.Models
 {

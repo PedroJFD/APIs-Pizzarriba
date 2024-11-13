@@ -1,6 +1,4 @@
 ﻿using Pizzarriba_APIs.Database;
-using System.Xml.Serialization;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using MySql.Data.MySqlClient;
 using FuncionarioAPI.Models;
 

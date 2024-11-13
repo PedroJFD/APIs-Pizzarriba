@@ -32,7 +32,7 @@ namespace FuncionarioAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarFuncionario([FromBody] Funcionario novoFuncionario)
+        public IActionResult CriarFuncionario([FromBody] FuncionarioDTO novoFuncionario)
         {
             var funcionario = new Funcionario();
 

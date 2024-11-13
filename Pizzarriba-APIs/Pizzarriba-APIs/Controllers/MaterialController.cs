@@ -1,14 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MaterialApi.Models;
-using System.Collections.Generic;
-using System.Linq;
-using ANP___Atividade___Cliente.Models;
-using Fornecedores;
-using ANP___Atividade___Cliente.Dtos;
-using ANP___Atividade___Cliente.Recursos;
 using Pizzarriba_APIs.DTOs;
-using MySqlX.XDevAPI;
-using Pizzarriba_APIs.Models;
 
 namespace MaterialApi.Controllers
 {

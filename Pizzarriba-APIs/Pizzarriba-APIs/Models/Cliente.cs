@@ -1,5 +1,4 @@
-﻿using System.Xml.Serialization;
-
+﻿
 namespace ANP___Atividade___Cliente.Models
 {
     public class Cliente

@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
-using ANP___Atividade___Cliente.Models;
-using ANP___Atividade___Cliente.Recursos;
-using ANP___Atividade___Cliente.Dtos;
+﻿using Microsoft.AspNetCore.Mvc;
 using Pizzarriba_APIs.DTOs;
 using Pizzarriba_APIs.Models;
-using MySqlX.XDevAPI;
 
 namespace ANP___Atividade___Cliente.Controllers
 {
