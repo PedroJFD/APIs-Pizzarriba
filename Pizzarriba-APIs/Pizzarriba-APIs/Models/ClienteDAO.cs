@@ -19,9 +19,10 @@ namespace ANP___Atividade___Cliente.Models
             try
             {
                 var query = conn.Query();
-                query.CommandText = "insert into Cliente (id_cli, nome_cli, sexo_cli, cpf_cli, telefone_cli, email_cli, rua_cli, bairro_cli, numero_cli, cidade_cli, complemento_cli) values (@id, @nome, @sexo, @sexo, @cpf, @email, @rua, @bairro, @numero, @cidade, @complemento);";
+                query.CommandText = "insert into Cliente (id_cli, codigo_cli, nome_cli, sexo_cli, cpf_cli, telefone_cli, email_cli, rua_cli, bairro_cli, numero_cli, cidade_cli, complemento_cli) values (@id, @codigo, @nome, @sexo, @sexo, @cpf, @email, @rua, @bairro, @numero, @cidade, @complemento);";
 
                 query.Parameters.AddWithValue("@id", item.Id);
+                query.Parameters.AddWithValue("@codigo", item.Codigo);
                 query.Parameters.AddWithValue("@nome", item.Nome);
                 query.Parameters.AddWithValue("@sexo", item.Sexo);
                 query.Parameters.AddWithValue("@cpf", item.Cpf);
@@ -68,6 +69,7 @@ namespace ANP___Atividade___Cliente.Models
                     list.Add(new Cliente()
                     {
                         Id = reader.GetInt32("id_cli"),
+                        Codigo = reader.GetInt32("codigo_cli"),
                         Nome = reader.GetString("nome_cli"),
                         Sexo = reader.GetString("sexo_cli"),
                         Cpf = reader.GetString("cpf_cli"),

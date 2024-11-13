@@ -7,11 +7,11 @@ namespace Pizzarriba_APIs.Database
     {
         private static readonly string host = "localhost";
 
-        private static readonly string port = "3360";
+        private static readonly string port = "3306";
 
         private static readonly string user = "root";
 
-        private static readonly string password = "root";
+        private static readonly string password = "Pwifro..123";
 
         private static readonly string dbname = "pizzarriba bd";
 

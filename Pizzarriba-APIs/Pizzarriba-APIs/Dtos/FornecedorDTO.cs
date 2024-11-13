@@ -5,7 +5,7 @@ namespace Fornecedores
     public class FornecedorDTO
     {
         [Required]
-        public int Id { get; set; }
+        public int Codigo { get; set; }
         [Required]
         public string Nome { get; set; }
         [Required]

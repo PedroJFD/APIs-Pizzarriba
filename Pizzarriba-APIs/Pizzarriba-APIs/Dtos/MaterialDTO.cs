@@ -5,7 +5,7 @@ namespace Pizzarriba_APIs.DTOs
     public class MaterialDTO
     {
         [Required]
-        public int Id { get; set; }
+        public int Codigo { get; set; }
         [Required]
         public string Nome { get; set; }
         [Required]

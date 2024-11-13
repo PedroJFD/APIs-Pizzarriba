@@ -5,6 +5,7 @@ namespace ANP___Atividade___Cliente.Models
     public class Cliente
     {
         public int Id { get; set; }
+        public int Codigo { get; set; }
         public string Nome { get; set; }
         public string Sexo { get; set; }
         public string Cpf { get; set; }

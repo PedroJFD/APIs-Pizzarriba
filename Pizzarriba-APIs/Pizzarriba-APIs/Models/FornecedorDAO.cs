@@ -20,9 +20,10 @@ namespace ANP___Atividade___Cliente.Models
             try
             {
                 var query = conn.Query();
-                query.CommandText = "insert into Fornecedor (id_for, nome_for, telefone_for, email_for, cnpj_for, endereco_for, cep_for, rua_for, bairro_for, numero_for values (@id, @nome, @telefone, @email, @cnpj, @endereco, @cep, @rua, @bairro, @numero);";
+                query.CommandText = "insert into Fornecedor (id_for, codigo_for, nome_for, telefone_for, email_for, cnpj_for, endereco_for, cep_for, rua_for, bairro_for, numero_for values (@id, @codigo, @nome, @telefone, @email, @cnpj, @endereco, @cep, @rua, @bairro, @numero);";
 
                 query.Parameters.AddWithValue("@id", item.Id);
+                query.Parameters.AddWithValue("@codigo", item.Codigo);
                 query.Parameters.AddWithValue("@nome", item.Nome);
                 query.Parameters.AddWithValue("@telefone", item.Telefone);
                 query.Parameters.AddWithValue("@email", item.Email);
@@ -68,6 +69,7 @@ namespace ANP___Atividade___Cliente.Models
                     list.Add(new Fornecedor()
                     {
                         Id = reader.GetInt32("id_for"),
+                        Codigo = reader.GetInt32("codigo_for"),
                         Nome = reader.GetString("nome_for"),
                         Telefone = reader.GetString("telefone_for"),
                         Email = reader.GetString("email_for"),

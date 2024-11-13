@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Reflection.PortableExecutable;
 using System.Xml.Serialization;
-using static ANP___Atividade___Cliente.Models.Cliente;
+using MySqlX.XDevAPI;
 
 namespace ANP___Atividade___Cliente.Controllers
 {
@@ -40,14 +40,15 @@ namespace ANP___Atividade___Cliente.Controllers
         public IActionResult Post([FromBody] ClienteDTO item)
         {
             var cliente = new Cliente();
-
-            cliente.Id = item.Id;
+            int ultimoId = listaClientes.LastOrDefault()?.Id ?? 0;
+            cliente.Id = ultimoId + 1;
+            cliente.Codigo = item.Codigo;
             cliente.Nome = item.Nome;
             cliente.Sexo = item.Sexo;
             cliente.Cpf = item.Cpf;
 
-            if(ValidadorCPF.ValidaCPF(cliente.Cpf) == true)
-            {  
+            if (ValidadorCPF.ValidaCPF(cliente.Cpf))
+            {
                 cliente.Telefone = item.Telefone;
                 cliente.Email = item.Email;
                 cliente.Rua = item.Rua;
@@ -61,14 +62,13 @@ namespace ANP___Atividade___Cliente.Controllers
                 try
                 {
                     var dao = new ClienteDAO();
-                    cliente.Id = dao.Insert(cliente);
+                    cliente.Id = dao.Insert(cliente); 
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
-
-                return StatusCode(StatusCodes.Status201Created, cliente);
+                return StatusCode(StatusCodes.Status201Created, "Cliente registrado com sucesso!");
             }
             else
             {
@@ -86,6 +86,7 @@ namespace ANP___Atividade___Cliente.Controllers
                 return BadRequest("Cliente não encontrado.");
             }
 
+            cliente.Codigo = item.Codigo;
             cliente.Nome = item.Nome;
             cliente.Sexo = item.Sexo;
             cliente.Cpf = item.Cpf;
@@ -100,7 +101,7 @@ namespace ANP___Atividade___Cliente.Controllers
                 cliente.Cidade = item.Cidade;
                 cliente.Complemento = item.Complemento;
 
-                return Ok(cliente);
+                return Ok("Cliente Atualizado!");
             }
             else
             {
@@ -120,7 +121,7 @@ namespace ANP___Atividade___Cliente.Controllers
 
             listaClientes.Remove(cliente);
 
-            return Ok(cliente);
+            return Ok("Cliente removido!");
         }
     }
 }

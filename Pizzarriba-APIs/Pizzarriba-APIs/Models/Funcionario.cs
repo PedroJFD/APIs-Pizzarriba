@@ -4,6 +4,7 @@
     {
         public string Nome { get; set; }
         public int ID { get; set; }
+        public int Codigo { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }
         public string CPF { get; set; }

@@ -4,11 +4,9 @@ using System.Text.RegularExpressions;
 using ANP___Atividade___Cliente.Models;
 using ANP___Atividade___Cliente.Recursos;
 using ANP___Atividade___Cliente.Dtos;
-using System.Xml;
-using System.Xml.Linq;
-using System.Reflection.PortableExecutable;
-using System.Xml.Serialization;
-using static ANP___Atividade___Cliente.Models.Cliente;
+using Pizzarriba_APIs.DTOs;
+using Pizzarriba_APIs.Models;
+using MySqlX.XDevAPI;
 
 namespace ANP___Atividade___Cliente.Controllers
 {
@@ -16,7 +14,8 @@ namespace ANP___Atividade___Cliente.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase
     {
-        List<Cliente> listaProdutos = new ProdutoDAO().List();
+        List<Produto> listaProdutos = new ProdutoDAO().List();
+        int contadorID = 1;
 
         [HttpGet]
         public IActionResult List()
@@ -41,58 +40,59 @@ namespace ANP___Atividade___Cliente.Controllers
         {
             var produto = new Produto();
 
-            produto.Id = item.Id;
+            int ultimoId = listaProdutos.LastOrDefault()?.Id ?? 0;
+            produto.Id = ultimoId + 1;
+            produto.Codigo = item.Codigo;
             produto.Nome = item.Nome;
             produto.Preco = item.Preco;
             produto.Descricao = item.Descricao;
 
+            listaProdutos.Add(produto);
+
+            try
+            {
+                var dao = new ProdutoDAO();
+                produto.Id = dao.Insert(produto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return StatusCode(StatusCodes.Status201Created, "Produto registrado com sucesso!");
         }
 
         [HttpPut("{Id}")]
-        public IActionResult Put(int Id, [FromBody] ClienteDTO item)
+        public IActionResult Put(int Id, [FromBody] ProdutoDTO item)
         {
-            var cliente = listaClientes.Where(item => item.Id == Id).FirstOrDefault();
+            var produto = listaProdutos.Where(item => item.Id == Id).FirstOrDefault();
 
-            if (cliente == null)
+            if (produto == null)
             {
-                return BadRequest("Cliente não encontrado.");
+                return BadRequest("Produto não encontrado.");
             }
 
-            cliente.Nome = item.Nome;
-            cliente.Sexo = item.Sexo;
-            cliente.Cpf = item.Cpf;
+            produto.Codigo = item.Codigo;
+            produto.Nome = item.Nome;
+            produto.Preco = item.Preco;
+            produto.Descricao = item.Descricao;
 
-            if (ValidadorCPF.ValidaCPF(cliente.Cpf) == true)
-            {
-                cliente.Telefone = item.Telefone;
-                cliente.Email = item.Email;
-                cliente.Rua = item.Rua;
-                cliente.Bairro = item.Bairro;
-                cliente.Numero = item.Numero;
-                cliente.Cidade = item.Cidade;
-                cliente.Complemento = item.Complemento;
-
-                return Ok(cliente);
-            }
-            else
-            {
-                return BadRequest("CPF Inválido.");
-            }
+            return Ok("Produto Atualizado!");
         }
 
         [HttpDelete("{Id}")]
         public IActionResult Delete(int Id)
         {
-            var cliente = listaClientes.Where(item => item.Id == Id).FirstOrDefault();
+            var cliente = listaProdutos.Where(item => item.Id == Id).FirstOrDefault();
 
             if (cliente == null)
             {
-                return BadRequest("Cliente não encontrado.");
+                return BadRequest("Produto não encontrado.");
             }
 
-            listaClientes.Remove(cliente);
+            listaProdutos.Remove(cliente);
 
-            return Ok(cliente);
+            return Ok("Produto removido!");
         }
     }
 }

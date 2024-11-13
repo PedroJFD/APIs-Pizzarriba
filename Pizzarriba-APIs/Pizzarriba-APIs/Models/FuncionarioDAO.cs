@@ -20,13 +20,14 @@ namespace ANP___Atividade___Funcionario.Models
             try
             {
                 var query = conn.Query();
-                query.CommandText = "insert into Funcionario (nome_fun, id_fun, email_fun, telefone_fun, cpf_fun, rg_fun, pisniT_fun, " +
+                query.CommandText = "insert into Funcionario (nome_fun, id_fun, codigo_fun, email_fun, telefone_fun, cpf_fun, rg_fun, pisniT_fun, " +
                     "orgao_emissor_rg_fun,cargo_fun, endereço_fun, rua_fun, " +
-                    "numero_fun cidade_fun, bairro_fun, complemento_fun values (@nome, @id, @email, @telefone, " +
+                    "numero_fun cidade_fun, bairro_fun, complemento_fun values (@nome, @id, @codigo, @email, @telefone, " +
                     "@cpf, @rg,@pis_nit @orgao_emissor_rg, @cargo, @endereco, @rua,  @numero, @cidade, @bairro, @complemento);";
 
                 query.Parameters.AddWithValue("@nome", item.Nome);
                 query.Parameters.AddWithValue("@id", item.ID);
+                query.Parameters.AddWithValue("@codigo", item.Codigo);
                 query.Parameters.AddWithValue("@email", item.Email);
                 query.Parameters.AddWithValue("@telefone", item.Telefone);
                 query.Parameters.AddWithValue("@email", item.CPF);
@@ -77,6 +78,7 @@ namespace ANP___Atividade___Funcionario.Models
                     {
                         Nome = reader.GetString("nome_fun"),
                         ID = reader.GetInt32("id_fun"),
+                        Codigo = reader.GetInt32("codigo_fun"),
                         Email = reader.GetString("email_fun"),
                         Telefone = reader.GetString("telefone_fun"),
                         CPF = reader.GetString("cpf_fun"),

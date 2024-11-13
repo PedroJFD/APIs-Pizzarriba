@@ -52,20 +52,21 @@ namespace Fornecedores.Controllers
                 return BadRequest("CNPJ inválido.");
             }
 
-            var fornecedor = new Fornecedor
-            {
-                Id = dto.Id,
-                Nome = dto.Nome,
-                Telefone = dto.Telefone,
-                Email = dto.Email,
-                CNPJ = dto.CNPJ,
-                Endereco = dto.Endereco,
-                Cep = dto.Cep,
-                Rua = dto.Rua,
-                Bairro = dto.Bairro,
-                Numero = dto.Numero,
-                Produto = dto.Produto
-            };
+            var fornecedor = new Fornecedor();
+
+            int ultimoId = listaFornecedor.LastOrDefault()?.Id ?? 0;
+            fornecedor.Id = ultimoId + 1;
+            fornecedor.Codigo = dto.Codigo;
+            fornecedor.Nome = dto.Nome;
+            fornecedor.Telefone = dto.Telefone;
+            fornecedor.Email = dto.Email;
+            fornecedor.CNPJ = dto.CNPJ;
+            fornecedor.Endereco = dto.Endereco;
+            fornecedor.Cep = dto.Cep;
+            fornecedor.Rua = dto.Rua;
+            fornecedor.Bairro = dto.Bairro;
+            fornecedor.Numero = dto.Numero;
+            fornecedor.Produto = dto.Produto;
 
             try
             {
@@ -77,7 +78,7 @@ namespace Fornecedores.Controllers
                 return BadRequest(ex.Message);
             }
 
-            return StatusCode(StatusCodes.Status201Created, fornecedor);
+            return StatusCode(StatusCodes.Status201Created, "Fornecedor registrado com sucesso!");
         }
 
         [HttpPut("{cnpj}")]
@@ -95,6 +96,7 @@ namespace Fornecedores.Controllers
                 return NotFound("Fornecedor não encontrado.");
             }
 
+            fornecedor.Codigo = dto.Codigo;
             fornecedor.Nome = dto.Nome ?? fornecedor.Nome;
             fornecedor.Telefone = dto.Telefone ?? fornecedor.Telefone;
             fornecedor.Email = dto.Email ?? fornecedor.Email;
@@ -105,7 +107,7 @@ namespace Fornecedores.Controllers
             fornecedor.Numero = dto.Numero ?? fornecedor.Numero;
             fornecedor.Produto = dto.Produto ?? fornecedor.Produto;
 
-            return Ok(fornecedor);
+            return Ok("Fornecedor atualizado!");
         }
 
         [HttpDelete("{cnpj}")]
@@ -125,7 +127,7 @@ namespace Fornecedores.Controllers
 
             listaFornecedor.Remove(fornecedor);
 
-            return Ok(fornecedor);
+            return Ok("Fornecedor removido!");
         }
     }
 }

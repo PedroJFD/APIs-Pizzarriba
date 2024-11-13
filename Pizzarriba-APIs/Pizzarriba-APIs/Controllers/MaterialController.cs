@@ -8,6 +8,7 @@ using ANP___Atividade___Cliente.Dtos;
 using ANP___Atividade___Cliente.Recursos;
 using Pizzarriba_APIs.DTOs;
 using MySqlX.XDevAPI;
+using Pizzarriba_APIs.Models;
 
 namespace MaterialApi.Controllers
 {
@@ -18,12 +19,8 @@ namespace MaterialApi.Controllers
         private List<Material> materials = new MaterialDAO().List();
 
         [HttpGet]
-        public ActionResult<IEnumerable<Material>> ConsultarMateriais()
+        public IActionResult List()
         {
-            if (!materials.Any())
-            {
-                return NoContent();
-            }
             return Ok(materials);
         }
 
@@ -41,31 +38,24 @@ namespace MaterialApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] MaterialDTO item)
         {
-            if (item == null || !ModelState.IsValid) 
-            {
-                return BadRequest("Dados inválidos.");
-            }
-
-            var material = new Material
-            {
-                Id = item.Id, 
-                Nome = item.Nome,
-                Medida = item.Medida,
-                Quantidade = item.Quantidade
-            };
+            var material = new Material();
+            int ultimoId = materials.LastOrDefault()?.Id ?? 0;
+            material.Id = ultimoId + 1;
+            material.Codigo = item.Codigo;
+            material.Nome = item.Nome;
+            material.Medida = item.Medida;
+            material.Quantidade = item.Quantidade;
 
             try
             {
                 var dao = new MaterialDAO();
-                material.Id = dao.Insert(material); 
-
-                return CreatedAtAction(nameof(ConsultarMaterial), new { id = material.Id }, material);
-
+                material.Id = dao.Insert(material);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao inserir material: {ex.Message}");
+                return BadRequest(ex.Message);
             }
+            return StatusCode(StatusCodes.Status201Created, "Material registrado com sucesso!");
         }
 
         [HttpPut("{id}")]
@@ -86,7 +76,7 @@ namespace MaterialApi.Controllers
             material.Medida = materialAtualizado.Medida;
             material.Quantidade = materialAtualizado.Quantidade;
 
-            return Ok(material);
+            return Ok("Material atualizado!");
         }
 
         [HttpDelete("{id}")]
@@ -99,7 +89,7 @@ namespace MaterialApi.Controllers
             }
 
             materials.Remove(material);
-            return Ok(material);
+            return Ok("Material removido!");
         }
     }
 }

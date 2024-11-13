@@ -1,16 +1,13 @@
 ﻿using FuncionarioAPI.Models;
 using ANP___Atividade___Cliente.Recursos;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Fornecedores;
 using Pizzarriba_APIs.Dtos;
 using ANP___Atividade___Funcionario.Models;
 
 namespace FuncionarioAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("Funcionario")]
     public class FuncionarioController : ControllerBase
     {
         List<Funcionario> ListaFuncionarios = new FuncionarioDAO().List();
@@ -40,31 +37,15 @@ namespace FuncionarioAPI.Controllers
             var funcionario = new Funcionario();
 
             funcionario.Nome = novoFuncionario.Nome;
-            funcionario.ID = novoFuncionario.ID;
+            int ultimoId = ListaFuncionarios.LastOrDefault()?.ID ?? 0;
+            funcionario.ID = ultimoId + 1;
+            funcionario.Codigo = novoFuncionario.Codigo;
             funcionario.Email = novoFuncionario.Email;
             funcionario.Telefone = novoFuncionario.Telefone;
             funcionario.CPF = novoFuncionario.CPF;
-            funcionario.RG = novoFuncionario.RG;
-            funcionario.PISNIT = novoFuncionario.PISNIT;
-            funcionario.OrgaoEmissorRG = novoFuncionario.OrgaoEmissorRG;
-            funcionario.Cargo = novoFuncionario.Cargo;
-            funcionario.Endereco = novoFuncionario.Endereco;
-            funcionario.Rua = novoFuncionario.Rua;
-            funcionario.Numero = novoFuncionario.Numero;
-            funcionario.Bairro = novoFuncionario.Bairro;
-            funcionario.Cidade = novoFuncionario.Cidade;
-            funcionario.Complemento = novoFuncionario.Complemento;
-
-            ListaFuncionarios.Add(funcionario);
-
 
             if (ValidadorCPF.ValidaCPF(funcionario.CPF) == true)
             {
-                funcionario.Nome = novoFuncionario.Nome;
-                funcionario.ID = novoFuncionario.ID;
-                funcionario.Email = novoFuncionario.Email;
-                funcionario.Telefone = novoFuncionario.Telefone;
-                funcionario.CPF = novoFuncionario.CPF;
                 funcionario.RG = novoFuncionario.RG;
                 funcionario.PISNIT = novoFuncionario.PISNIT;
                 funcionario.OrgaoEmissorRG = novoFuncionario.OrgaoEmissorRG;
@@ -88,10 +69,10 @@ namespace FuncionarioAPI.Controllers
                     return BadRequest(ex.Message);
                 }
 
-                return StatusCode(StatusCodes.Status201Created, funcionario);
+                return StatusCode(StatusCodes.Status201Created, "Funcionario registrado com sucesso!");
             }
             else
-            { return BadRequest("CPF Inválido. "); }
+            { return BadRequest("CPF Inválido."); }
         }
     
 
@@ -106,26 +87,13 @@ namespace FuncionarioAPI.Controllers
             }
 
             funcionario.Nome = item.Nome;
-            funcionario.ID = item.ID;
+            funcionario.Codigo = item.Codigo;
             funcionario.Email = item.Email;
             funcionario.Telefone = item.Telefone;
             funcionario.CPF = item.CPF;
-            funcionario.RG = item.RG;
-            funcionario.PISNIT = item.PISNIT;
-            funcionario.OrgaoEmissorRG = item.OrgaoEmissorRG;
-            funcionario.Cargo = item.Cargo;
-            funcionario.Endereco = item.Endereco;
-            funcionario.Rua = item.Rua;
-            funcionario.Numero = item.Numero;
-            funcionario.Bairro = item.Bairro;
-            funcionario.Cidade = item.Cidade;
 
             if (ValidadorCPF.ValidaCPF(funcionario.CPF) == true)
             {
-                funcionario.Nome = item.Nome;
-                funcionario.ID = item.ID;
-                funcionario.Email = item.Email;
-                funcionario.Telefone = item.Telefone;
                 funcionario.CPF = item.CPF;
                 funcionario.RG = item.RG;
                 funcionario.PISNIT = item.PISNIT;
@@ -137,7 +105,7 @@ namespace FuncionarioAPI.Controllers
                 funcionario.Bairro = item.Bairro;
                 funcionario.Cidade = item.Cidade;
 
-                return Ok(funcionario);
+                return Ok("Funcionario atualizado!");
             } else
             { return BadRequest("CPF Inválido. ");  }
 
@@ -155,7 +123,7 @@ namespace FuncionarioAPI.Controllers
 
                 ListaFuncionarios.Remove(funcionario);
 
-                return Ok(funcionario);
+                return Ok("Funcionario removido!");
             }
     }
 }

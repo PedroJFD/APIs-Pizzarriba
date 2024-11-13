@@ -3,6 +3,7 @@ USE `pizzarriba bd`;
 
 create table Cliente (
 	id_cli int primary key,
+    codigo_cli int,
 	nome_cli varchar(200),
 	sexo_cli varchar(100),
 	cpf_cli varchar(100),
@@ -18,6 +19,7 @@ create table Cliente (
 create table Funcionario (
 	nome_fun varchar(200),
 	id_fun int primary key,
+	codigo_fun int,
 	email_fun varchar(200),
 	telefone_fun varchar(20),
 	cpf_fun varchar(20),
@@ -35,6 +37,7 @@ create table Funcionario (
 
 create table Fornecedor (
 	id_for int primary key,
+    codigo_for int,
 	nome_for varchar(200),
 	telefone_for varchar(20),
 	email_for varchar(200),
@@ -48,23 +51,23 @@ create table Fornecedor (
 
 create table Ingrediente (
 	id_ing int primary key,
+    codigo_ing int,
 	nome_ing varchar(200),
 	medida_ing varchar(100),
-	quantidade_ing double,
+	quantidade_ing double
 );
 
 create table Produto (
 	id_pro int primary key,
+    codigo_pro int,
 	nome_pro varchar(200),
-	preco_pro float,
+	preco_pro float
 );
 
 create table Material (
 	id_mat int primary key,
+    codigo_mat int,
     nome_mat varchar(200),
     medida_mat varchar(50),
     quantidade_mat double
 );
-
-##insert into Cliente (id_cli, nome_cli, sexo_cli, cpf_cli, telefone_cli, email_cli, rua_cli, bairro_cli, numero_cli, cidade_cli, complemento_cli) values (1, 'Pedro Joaquim', 'Masculino', '043.389.642-60', '(69) 99303-48903', 'pedrojoca@gmail.com', 'Nossa Senhora Aparecida', 'União', '509', 'Ouro Preto do Oeste', 'Casa de Esquina');
-##SELECT * FROM pizzarriba.cliente;

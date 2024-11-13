@@ -8,7 +8,7 @@ namespace Pizzarriba_APIs.Dtos
        [Required]
         public string Nome { get; set; }
         [Required]
-        public int ID { get; set; }
+        public int Codigo { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]

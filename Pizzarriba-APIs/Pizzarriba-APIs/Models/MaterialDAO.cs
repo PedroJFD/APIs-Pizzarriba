@@ -20,9 +20,10 @@ namespace MaterialApi.Models
             try
             {
                 var query = conn.Query();
-                query.CommandText = "insert into Material (id_mat, nome_mat, medida_mat, quantidade_mat) values (@id, @nome, @medida, @quantidade);";
+                query.CommandText = "insert into Material (id_mat, codigo_mat, nome_mat, medida_mat, quantidade_mat) values (@id, @nome, @medida, @quantidade);";
 
                 query.Parameters.AddWithValue("@id", item.Id);
+                query.Parameters.AddWithValue("@codigo", item.Codigo);
                 query.Parameters.AddWithValue("@nome", item.Nome);
                 query.Parameters.AddWithValue("@medida", item.Medida);
                 query.Parameters.AddWithValue("@quantidade", item.Quantidade);
@@ -62,6 +63,7 @@ namespace MaterialApi.Models
                     list.Add(new Material()
                     {
                         Id = reader.GetInt32("id_mat"),
+                        Codigo = reader.GetInt32("codigo_mat"),
                         Nome = reader.GetString("nome_mat"),
                         Medida = reader.GetString("medida_mat"),
                         Quantidade = reader.GetDouble("quantidade_mat")

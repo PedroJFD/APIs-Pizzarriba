@@ -5,7 +5,7 @@ namespace ANP___Atividade___Cliente.Dtos
     public class ClienteDTO
     {
         [Required]
-        public int Id { get; set; }
+        public int Codigo { get; set; }
         [Required]
         public string Nome { get; set; }
         [Required]
